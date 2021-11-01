@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5c489780975a1d20701f41b1"},"Flight_Number":"AK 034","Airline_Name":"Air Asia","Scheduled_Time":"07:35","City":"Vishakhapatnam ","Status":"DEPARTED","Estimated_Time":"07:32"}
+{"_id":{"$oid":"5c7611e154651743b09fff53"},"Flight_Number":"EY 247","Airline_Name":"Ethihad","Scheduled_Time":"09:55","Estimated_Time":"09:55","City":"Abu Dhabi","Status":"GATE CLOSED"}
+{"_id":{"$oid":"5c7611eb54651743b09fff54"},"Flight_Number":"SG 608","Airline_Name":"SpiceJet","Scheduled_Time":"10:20","Estimated_Time":"10:20","City":"Port Blair","Status":"BOARDING"}
+{"_id":{"$oid":"5c7611ed54651743b09fff55"},"Flight_Number":"6E 067","Airline_Name":"Indigo","Scheduled_Time":"\t18:35","Estimated_Time":"18:35","City":"Dubai","Status":"SCHEDULED"}

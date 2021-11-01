@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5c4b5513975a1d20701f41b2"},"Flight_Number":"QR 514","Airline_Name":"Indigo","Scheduled_Time":"07:15","Estimated_Time":"07:06","City":"Muscat","Status":"ARRIVED"}
+{"_id":{"$oid":"5c4b6094975a1d20701f41b3"},"Status":"ARRIVED","Airline_Name":"Air India","Scheduled_Time":"07:40","Estimated_Time":"07:23","City":"Mumbai","Flight_Number":"IX 412"}
+{"_id":{"$oid":"5c4bdd26975a1d20701f41b4"},"Status":"CANCELLED","Airline_Name":"Ethihad","Scheduled_Time":"13:10","Estimated_Time":"13:10","City":"Abu Dhabi","Flight_Number":"EY 246"}
+{"_id":{"$oid":"5c4bf1fb975a1d20701f41b5"},"Status":"SCHEDULED","Airline_Name":"SpiceJet","Scheduled_Time":"17:00","Estimated_Time":"17:00","City":"Dubai","Flight_Number":"SG 018"}

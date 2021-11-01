@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script type = "text/javascript"
+         src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>
+         <link rel = "stylesheet"
+         href = "https://fonts.googleapis.com/icon?family=Material+Icons">
+         <!-- <link rel = "stylesheet"  
+         href = "https://fonts.googleapis.com/icon?family=Material+Icons">  
+      <link rel = "stylesheet"  
+         href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">  
+      <script type = "text/javascript"  
+         src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>             
+      <script src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js">  
+      </script>  -->
+      <!-- <script>
+        function showToast(message, duration) {
+            Materialize.toast(message, duration);
+         }
+         </script> -->
+        <title>Flight Status</title>
+        <!-- <script type = "text/javascript" src="/convertjs.js "></script> -->
+        <style>
+            body
+            {
+                max-width: 1000px;
+                margin: 2em auto;
+                font-size: 20px;
+            }
+
+            h1
+            {
+                text-align: center;
+            }
+
+            .buttons-wrapper
+            {
+                text-align: center;
+            }
+
+            .hidden
+            {
+                display: none;
+            }
+
+            #transcription,
+            #log
+            {
+                display: block;
+                width: 100%;
+                height: 5em;
+                overflow-y: scroll;
+                border: 1px solid #333333;
+                line-height: 1.3em;
+            }
+
+            .button-demo
+            {
+                padding: 0.5em;
+                display: inline-block;
+                margin: 1em auto;
+            }
+        </style>
+    </head>
+    <body >
+    <!-- onload = "showToast('hello',3000)"> -->
+    <h1>Flight Status(Arrivals)</h1><br>
+        <table class = "centered striped #ff8a65 deep-orange lighten-2">
+            <tr>
+                <th style="text-align: center">Flight Number</th>
+                <th style="text-align: center">Airline Name</th>
+                <th style="text-align: center">Scheduled Time</th>
+                <th style="text-align: center">Estimated Time</th>
+                <th style="text-align: center">City</th>
+                <th style="text-align: center">Status</th>
+            </tr>
+            <tr>
+                <td><%=flight1.Flight_Number%></td>
+                <td><%=flight1.Airline_Name%></td>
+                <td><%=flight1.Scheduled_Time%></td>
+                <td><%=flight1.Estimated_Time%></td>
+                <td><%=flight1.City%></td>
+                <td><%=flight1.Status%></td>
+            </tr>
+        </table>
+        <!-- <h1>Web Speech API</h1> -->
+        <h5 align = "center">Tell/Type Your Flight Number</h5>
+        <form action ="http://localhost:3000/arrivals/view" method="POST">
+            <!-- <textarea name = "aircraft_no" id="aircraft_no" readonly="readonly"></textarea> -->
+            <textarea name = "aircraft_no" id="aircraft_no"></textarea>
+
+            <!-- <span>Results:</span> -->
+            <label><input hidden type="radio" name="recognition-type" value="final" checked="checked" /> </label>
+            <label><input hidden type="radio" name="recognition-type" value="interim" /> </label>
+
+            <!-- <h3>Log</h3> -->
+            <!-- <div id="log"></div> -->
+            <!-- <a class="waves-effect waves-light btn">Button</a> -->
+            <div class="buttons-wrapper">
+                <br>
+            <!-- <a class="">Button</a> -->
+            <!-- <input type = "button" id="button-play-ws" class="button-demo"/>Start Recording -->
+            <input type = "button" id="button-play-ws" class="waves-effect waves-light btn" value = "Start Recording"/>
+            <input type = "button" id="button-stop-ws" value = "Stop Recording" class="waves-effect waves-light btn"/>
+            <input type = "button" id="clear-all" class="waves-effect waves-light btn" value ="Clear all"/>
+            </div>
+            <span id="ws-unsupported" class="hidden">API not supported</span>
+            <!-- <button type="button" onclick="convert1(document.getElementById('aircraft_no').value)">Convert</button> -->
+            <br>
+            <div style="text-align:center">  
+                <!-- <h1>test</h1> -->
+            <input id = "Search" type = "submit"  value="Search" class = "waves-effect waves-light btn" onclick="convert1(document.getElementById('aircraft_no').value)"/>
+            <a id = "ShowAll" href ="http://localhost:3000/arrivals"><input type = "button"  class="waves-effect waves-light btn" value ="Show All"/></a>
+            </div>
+        </form>
+        <script>
+            // Function to convert heard string to general format
+            function convert1()
+            {
+                var test1;
+                test1 = s.replace(/ /g,'');
+                var test2 = '';
+                // test2 += test1.charAt(0);
+                test2 += test1.charAt(0).toUpperCase();
+                // test2 += test1.charAt(1);
+                test2 += test1.charAt(1).toUpperCase();
+                test2 += ' ';
+                test2 += test1.substr(2);
+                // console.log(test2);
+                document.getElementById('aircraft_no').value = test2;
+            }       
+            // Test browser support
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+
+            if (window.SpeechRecognition === null) 
+            {
+                document.getElementById('ws-unsupported').classList.remove('hidden');
+                document.getElementById('button-play-ws').setAttribute('disabled', 'disabled');
+                document.getElementById('button-stop-ws').setAttribute('disabled', 'disabled');
+            } 
+            else 
+            {
+                var recognizer = new window.SpeechRecognition();
+                var aircraft_no = document.getElementById('aircraft_no');
+                var log = document.getElementById('log');
+
+                // Recogniser doesn't stop listening even if the user pauses
+                recognizer.continuous = true;
+
+                // Start recognising
+                recognizer.onresult = function(event) 
+                {
+                    aircraft_no.textContent = '';
+
+                    for (var i = event.resultIndex; i < event.results.length; i++) 
+                    {
+                        if (event.results[i].isFinal) 
+                        {
+                            aircraft_no.textContent = event.results[i][0].transcript;
+                        } 
+                        else 
+                        {
+                            aircraft_no.textContent += event.results[i][0].transcript;
+                        }
+                    }
+                    
+                    // aircraft_no.textContent = convert(aircraft_no.textContent);
+                    // console.log(aircraft_no.textContent + "hi11");
+                };
+
+                // Listen for errors
+                recognizer.onerror = function(event) 
+                {
+                    log.innerHTML = 'Recognition error: ' + event.message + '<br />' + log.innerHTML;
+                };
+
+                document.getElementById('button-play-ws').addEventListener('click', function() 
+                {
+                    // Set if we need interim results
+                    recognizer.interimResults = document.querySelector('input[name="recognition-type"][value="interim"]').checked;
+
+                    try 
+                    {
+                        recognizer.start();
+                        log.innerHTML = 'Recognition started' + '<br />' + log.innerHTML;
+                    } 
+                    catch(ex) 
+                    {
+                        log.innerHTML = 'Recognition error: ' + ex.message + '<br />' + log.innerHTML;
+                    }
+                });
+
+                document.getElementById('button-stop-ws').addEventListener('click', function() 
+                {
+                    recognizer.stop();
+                    log.innerHTML = 'Recognition stopped' + '<br />' + log.innerHTML;
+                });
+
+                document.getElementById('clear-all').addEventListener('click', function() 
+                {
+                    document.getElementById('aircraft_no').value = '';
+                    log.textContent = '';
+                });
+            }
+        </script>
+    </body>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+</html>
